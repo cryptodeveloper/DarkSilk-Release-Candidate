@@ -468,7 +468,6 @@ SOURCES += src/qt/darksilk.cpp src/qt/darksilkgui.cpp \
     src/glibcxx_sanity.cpp \
     src/glibc_sanity.cpp
 
-
 RESOURCES += \
             src/qt/darksilk.qrc
 

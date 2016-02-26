@@ -276,6 +276,8 @@ void OverviewPage::setWalletModel(WalletModel *model)
         connect(model, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this, SLOT(setBalance(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
 
         connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
+        connect(model->getOptionsModel(), SIGNAL(sandstormRoundsChanged()), this, SLOT(updateSandstormProgress()));
+        connect(model->getOptionsModel(), SIGNAL(anonymizeDarkSilkAmountChanged()), this, SLOT(updateSandstormProgress()));
 
         connect(ui->sandstormAuto, SIGNAL(clicked()), this, SLOT(sandstormAuto()));
         connect(ui->sandstormReset, SIGNAL(clicked()), this, SLOT(sandstormReset()));
@@ -418,17 +420,19 @@ void OverviewPage::updateSandstormProgress()
 void OverviewPage::sandStormStatus()
 {
     if(IsInitialBlockDownload()) return;
+ 
+    if (!pindexBest) return;
     
+    //TODO
+    //if(!stormnodeSync.IsBlockchainSynced() || ShutdownRequested()) return;
+
+    static int64_t nLastSSProgressBlockTime = 0;
+
     int nBestHeight = pindexBest->nHeight;
 
-    if(nBestHeight != sandStormPool.cachedNumBlocks)
-    {
-        //we we're processing lots of blocks, we'll just leave
-        if(GetTime() - lastNewBlock < 10) return;
-        lastNewBlock = GetTime();
-
-        updateSandstormProgress();
-    }
+    // we we're processing more then 1 block per second, we'll just leave
+    if(((nBestHeight - sandStormPool.cachedNumBlocks) / (GetTimeMillis() - nLastSSProgressBlockTime + 1) > 1)) return;
+    nLastSSProgressBlockTime = GetTimeMillis();
 
     if(!fEnableSandstorm) {
         if(nBestHeight != sandStormPool.cachedNumBlocks)
