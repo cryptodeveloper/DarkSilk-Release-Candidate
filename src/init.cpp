@@ -17,25 +17,25 @@
 #include "main.h"
 #include "chainparams.h"
 #include "txdb.h"
-#include "rpcserver.h"
+#include "rpc/rpcserver.h"
 #include "net.h"
 #include "util.h"
 #include "key.h"
 #include "pubkey.h"
 #include "ui_interface.h"
-#include "activestormnode.h"
+#include "anon/stormnode/activestormnode.h"
 #include "sanity.h"
-#include "stormnode-budget.h"
-#include "stormnode-payments.h"
-#include "stormnodeman.h"
-#include "spork.h"
-#include "stormnodeconfig.h"
+#include "anon/stormnode/stormnode-budget.h"
+#include "anon/stormnode/stormnode-payments.h"
+#include "anon/stormnode/stormnodeman.h"
+#include "anon/stormnode/spork.h"
+#include "anon/stormnode/stormnodeconfig.h"
 #include "smessage.h"
 #include "txdb-leveldb.h"
 
 #ifdef ENABLE_WALLET
-#include "wallet.h"
-#include "walletdb.h"
+#include "wallet/wallet.h"
+#include "wallet/walletdb.h"
 #endif
 
 #ifndef WIN32
@@ -43,7 +43,7 @@
 #endif
 
 #ifdef USE_NATIVE_I2P
-#include "i2p.h"
+#include "i2p/i2p.h"
 #endif
 
 using namespace std;
@@ -743,12 +743,12 @@ bool AppInit2(boost::thread_group& threadGroup)
     }
 
     // see Step 2: parameter interactions for more information about these
-    fNoListen = !GetBoolArg("-listen", true);
+    fListen = !GetBoolArg("-listen", true);
     fDiscover = GetBoolArg("-discover", true);
     fNameLookup = GetBoolArg("-dns", true);
 
     bool fBound = false;
-    if (!fNoListen)
+    if (!fListen)
     {
         std::string strError;
         if (mapArgs.count("-bind")) {
@@ -910,7 +910,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     }
 
     // as LoadBlockIndex can take several minutes, it's possible the user
-    // requested to kill darksilk-qt during the last operation. If so, exit.
+    // requested to kill darksilk-core during the last operation. If so, exit.
     // As the program has not fully started yet, Shutdown() is possibly overkill.
     if (fRequestShutdown)
     {

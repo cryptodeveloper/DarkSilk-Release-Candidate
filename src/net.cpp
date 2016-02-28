@@ -8,7 +8,7 @@
 #include <boost/thread.hpp>
 
 #ifdef USE_NATIVE_I2P
-#include "i2p.h"
+#include "i2p/i2p.h"
 #endif
 
 #ifdef WIN32
@@ -30,8 +30,8 @@
 #include "clientversion.h"
 #include "primitives/transaction.h"
 #include "ui_interface.h"
-#include "sandstorm.h"
-#include "wallet.h"
+#include "anon/sandstorm/sandstorm.h"
+#include "wallet/wallet.h"
 
 #define TOR_NET_STRING "tor"
 
@@ -53,6 +53,7 @@ bool OpenNetworkConnection(const CAddress& addrConnect, CSemaphoreGrant *grantOu
 // Global state variables
 //
 bool fDiscover = true;
+bool fListen = true;
 #ifdef USE_NATIVE_I2P
 uint64_t nLocalServices = NODE_I2P | NODE_NETWORK;
 #else
@@ -93,6 +94,7 @@ NodeId nLastNodeId = 0;
 CCriticalSection cs_nLastNodeId;
 
 static CSemaphore *semOutbound = NULL;
+boost::condition_variable messageHandlerCondition;
 
 // Signals for message handling
 static CNodeSignals n_signals;
@@ -112,7 +114,7 @@ unsigned short GetListenPort()
 // find 'best' local address for a particular peer
 bool GetLocal(CService& addr, const CNetAddr *paddrPeer)
 {
-    if (fNoListen)
+    if (!fListen)
         return false;
 
     int nBestScore = -1;
@@ -231,7 +233,7 @@ void static AdvertizeLocal()
     LOCK(cs_vNodes);
     BOOST_FOREACH(CNode* pnode, vNodes)
     {
-        if (pnode->fSuccessfullyConnected)
+        if (fListen && pnode->fSuccessfullyConnected)
         {
             CAddress addrLocal = GetLocalAddress(&pnode->addr);
             if (addrLocal.IsRoutable() && (CService)addrLocal != (CService)pnode->addrLocal)
@@ -605,11 +607,17 @@ bool CNode::ReceiveMsgBytes(const char *pch, unsigned int nBytes)
         if (handled < 0)
                 return false;
 
+        if (msg.in_data && msg.hdr.nMessageSize > MAX_PROTOCOL_MESSAGE_LENGTH) {
+            LogPrint("net", "Oversized message from peer=%i, disconnecting", GetId());
+            return false;
+        }
+
         pch += handled;
         nBytes -= handled;
 
         if (msg.complete())
             msg.nTime = GetTimeMicros();
+            messageHandlerCondition.notify_one();
     }
 
     return true;
@@ -1592,6 +1600,9 @@ void static StartSync(const vector<CNode*> &vNodes) {
 
 void ThreadMessageHandler()
 {
+    boost::mutex condition_mutex;
+    boost::unique_lock<boost::mutex> lock(condition_mutex);
+
     SetThreadPriority(THREAD_PRIORITY_BELOW_NORMAL);
     while (true)
     {
@@ -1658,12 +1669,9 @@ void ThreadMessageHandler()
         }
 
         if (fSleep)
-            MilliSleep(1);
-
-        boost::this_thread::interruption_point();
+            messageHandlerCondition.timed_wait(lock, boost::posix_time::microsec_clock::universal_time() + boost::posix_time::milliseconds(100));
     }
 }
-
 
 #ifdef USE_NATIVE_I2P
 bool BindListenNativeI2P()
@@ -1888,10 +1896,8 @@ void StartNode(boost::thread_group& threadGroup)
     else
         threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "dnsseed", &ThreadDNSAddressSeed));
 
-#ifdef USE_UPNP
     // Map ports with UPnP
-    MapPort(GetBoolArg("-upnp", USE_UPNP));
-#endif
+    MapPort(GetBoolArg("-upnp", DEFAULT_UPNP));
 
     // Send and receive from sockets, accept connections
     threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "net", &ThreadSocketHandler));

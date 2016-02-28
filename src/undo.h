@@ -6,7 +6,7 @@
 #ifndef DARKSILK_UNDO_H
 #define DARKSILK_UNDO_H
 
-#include "compressor.h"
+#include "script/compressor.h"
 
 ///  Undo information for a CTxIn
 ///  Contains the prevout's CTxOut being spent, and if this was the

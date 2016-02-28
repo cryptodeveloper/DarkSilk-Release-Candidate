@@ -15,8 +15,8 @@
 #include "ui_debugconsole.h"
 #include "clientmodel.h"
 #include "guiutil.h"
-#include "rpcserver.h"
-#include "rpcclient.h"
+#include "rpc/rpcserver.h"
+#include "rpc/rpcclient.h"
 
 // TODO: add a scrollback limit, as there is currently none
 // TODO: make it possible to filter out categories (esp debug messages when implemented)

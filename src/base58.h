@@ -20,7 +20,7 @@
 #include "chainparams.h"
 #include "pubkey.h"
 #include "key.h"
-#include "script.h"
+#include "script/script.h"
 #include "allocators.h"
 
 /**

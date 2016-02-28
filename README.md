@@ -141,7 +141,7 @@ Example stormnode.conf Configuration
 
 > If you are running your stormnode as a hidden service, replace YOUR_IP with your onion hostname (typically found in /var/lib/tor/YOURHIDDENSERVICENAME/hostname).
 
-Port 31000 **must** be open.
+> Port 31000 must be open.
 
 > If you are using the hot/cold system where you are remotely activating your stormnode from your local wallet, you will also put these entries in your local (cold) wallet .conf:
 

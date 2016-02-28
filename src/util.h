@@ -139,7 +139,6 @@ extern bool fPrintToDebugLog;
 extern bool fServer;
 extern bool fCommandLine;
 extern std::string strMiscWarning;
-extern bool fNoListen;
 extern bool fLogIPs;
 extern bool fLogTimestamps;
 extern volatile bool fReopenDebugLog;

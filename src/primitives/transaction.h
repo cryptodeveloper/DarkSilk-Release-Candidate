@@ -12,7 +12,7 @@
 #include "uint256.h"
 #include "serialize.h"
 #include "util.h"
-#include "script.h"
+#include "script/script.h"
 #include "timedata.h"
 
 class CValidationInterface;

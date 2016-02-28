@@ -6,8 +6,8 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 
-#include "rpcserver.h"
-#include "rpcclient.h"
+#include "rpc/rpcserver.h"
+#include "rpc/rpcclient.h"
 #include "init.h"
 
 static bool fDaemon;

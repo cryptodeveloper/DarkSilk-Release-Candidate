@@ -6,8 +6,8 @@
 #include <map>
 
 #include "allocators.h" /* for SecureString */
-#include "instantx.h"
-#include "wallet.h"
+#include "anon/instantx/instantx.h"
+#include "wallet/wallet.h"
 
 class OptionsModel;
 class AddressTableModel;

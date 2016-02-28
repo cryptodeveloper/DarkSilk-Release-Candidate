@@ -157,9 +157,9 @@ QMAKE_CLEAN += $$PWD/src/leveldb/libleveldb.a; cd $$PWD/src/leveldb ; $(MAKE) cl
 
 #contains(DEFINES, USE_NATIVE_I2P) {
 #    geni2pbuild.depends = FORCE
-#    geni2pbuild.commands = cd $$PWD; /bin/sh share/inc_build_number.sh src/i2pbuild.h darksilk-qt-build-number
-#    geni2pbuild.target = src/i2pbuild.h
-#    PRE_TARGETDEPS += src/i2pbuild.h
+#    geni2pbuild.commands = cd $$PWD; /bin/sh share/inc_build_number.sh src/i2p/i2pbuild.h darksilk-core-build-number
+#    geni2pbuild.target = src/i2p/i2pbuild.h
+#    PRE_TARGETDEPS += src/i2p/i2pbuild.h
 #    QMAKE_EXTRA_TARGETS += geni2pbuild
 #}
 
@@ -210,6 +210,7 @@ DEPENDPATH += . \
               src/secp256k1/src/java
 
 HEADERS +=  src/qt/darksilkgui.h \
+	    src/anon/stormnode/activestormnode.h \
             src/qt/transactiontablemodel.h \
             src/qt/addresstablemodel.h \
             src/qt/optionsdialog.h \
@@ -245,11 +246,11 @@ HEADERS +=  src/qt/darksilkgui.h \
             src/key.h \
             src/ecwrapper.h \
             src/pubkey.h \
-            src/db.h \
+            src/wallet/db.h \
             src/txdb.h \
             src/txmempool.h \
-            src/walletdb.h \
-            src/script.h \
+            src/wallet/walletdb.h \
+            src/script/script.h \
             src/init.h \
             src/mruset.h \
             src/json/json_spirit_writer_template.h \
@@ -271,14 +272,14 @@ HEADERS +=  src/qt/darksilkgui.h \
             src/qt/transactiondesc.h \
             src/qt/transactiondescdialog.h \
             src/qt/darksilkamountfield.h \
-            src/wallet.h \
+            src/wallet/wallet.h \
             src/keystore.h \
             src/qt/transactionfilterproxy.h \
             src/qt/transactionview.h \
             src/qt/walletmodel.h \
-            src/rpcclient.h \
-            src/rpcprotocol.h \
-            src/rpcserver.h \
+            src/rpc/rpcclient.h \
+            src/rpc/rpcprotocol.h \
+            src/rpc/rpcserver.h \
             src/timedata.h \
             src/qt/overviewpage.h \
             src/qt/blockbrowser.h \
@@ -301,18 +302,17 @@ HEADERS +=  src/qt/darksilkgui.h \
             src/clientversion.h \
             src/threadsafety.h \
             src/tinyformat.h \
-            src/stealth.h \
+            src/anon/stealth/stealth.h \
             src/qt/flowlayout.h \
             src/qt/sandstormconfig.h \
-            src/stormnode.h \ 
-            src/stormnode-budget.h \
-            src/stormnode-payments.h \
-            src/sandstorm.h \    
-            src/sandstorm-relay.h \
-            src/instantx.h \
-            src/activestormnode.h \
-            src/stormnodeman.h \
-            src/spork.h \
+            src/anon/stormnode/stormnode.h \ 
+            src/anon/stormnode/stormnode-budget.h \
+            src/anon/stormnode/stormnode-payments.h \
+            src/anon/sandstorm/sandstorm.h \    
+            src/anon/sandstorm/sandstorm-relay.h \
+            src/anon/instantx/instantx.h \
+            src/anon/stormnode/stormnodeman.h \
+            src/anon/stormnode/spork.h \
             src/crypto/common.h \
             src/crypto/hmac_sha256.h \
             src/crypto/hmac_sha512.h \
@@ -334,10 +334,10 @@ HEADERS +=  src/qt/darksilkgui.h \
             src/qt/peertablemodel.h \
             src/primitives/block.h \
             src/primitives/transaction.h \
-            src/stormnode-sync.h \
+            src/anon/stormnode/stormnode-sync.h \
             src/chain.h \
             src/coins.h \
-            src/compressor.h \
+            src/script/compressor.h \
             src/undo.h \
             src/leveldbwrapper.h \
             src/streams.h \
@@ -355,6 +355,7 @@ HEADERS +=  src/qt/darksilkgui.h \
             src/crypto/argon2/opt.h
 
 SOURCES +=  src/qt/darksilk.cpp src/qt/darksilkgui.cpp \
+            src/anon/stormnode/activestormnode.cpp \
             src/qt/transactiontablemodel.cpp \
             src/qt/addresstablemodel.cpp \
             src/qt/optionsdialog.cpp \
@@ -380,7 +381,7 @@ SOURCES +=  src/qt/darksilk.cpp src/qt/darksilkgui.cpp \
             src/key.cpp \
             src/ecwrapper.cpp \
             src/pubkey.cpp \
-            src/script.cpp \
+            src/script/script.cpp \
             src/main.cpp \
             src/miner.cpp \
             src/init.cpp \
@@ -388,8 +389,8 @@ SOURCES +=  src/qt/darksilk.cpp src/qt/darksilkgui.cpp \
             src/checkpoints.cpp \
             src/addrman.cpp \
             src/base58.cpp \
-            src/db.cpp \
-            src/walletdb.cpp \
+            src/wallet/db.cpp \
+            src/wallet/walletdb.cpp \
             src/qt/clientmodel.cpp \
             src/qt/guiutil.cpp \
             src/qt/transactionrecord.cpp \
@@ -400,21 +401,21 @@ SOURCES +=  src/qt/darksilk.cpp src/qt/darksilkgui.cpp \
             src/qt/transactiondescdialog.cpp \
             src/qt/darksilkstrings.cpp \
             src/qt/darksilkamountfield.cpp \
-            src/wallet.cpp \
+            src/wallet/wallet.cpp \
             src/keystore.cpp \
             src/qt/transactionfilterproxy.cpp \
             src/qt/transactionview.cpp \
             src/qt/walletmodel.cpp \
-            src/rpcclient.cpp \
-            src/rpcprotocol.cpp \
-            src/rpcserver.cpp \
-            src/rpcdump.cpp \
-            src/rpcmisc.cpp \
-            src/rpcnet.cpp \
-            src/rpcmining.cpp \
-            src/rpcwallet.cpp \
-            src/rpcblockchain.cpp \
-            src/rpcrawtransaction.cpp \
+            src/rpc/rpcclient.cpp \
+            src/rpc/rpcprotocol.cpp \
+            src/rpc/rpcserver.cpp \
+            src/wallet/rpcdump.cpp \
+            src/rpc/rpcmisc.cpp \
+            src/rpc/rpcnet.cpp \
+            src/rpc/rpcmining.cpp \
+            src/wallet/rpcwallet.cpp \
+            src/rpc/rpcblockchain.cpp \
+            src/rpc/rpcrawtransaction.cpp \
             src/timedata.cpp \
             src/qt/overviewpage.cpp \
             src/qt/blockbrowser.cpp \
@@ -436,21 +437,20 @@ SOURCES +=  src/qt/darksilk.cpp src/qt/darksilkgui.cpp \
             src/scrypt-x86_64.S \
             src/scrypt.cpp \
             src/pbkdf2.cpp \
-            src/stealth.cpp \
+            src/anon/stealth/stealth.cpp \
             src/qt/flowlayout.cpp \
             src/qt/sandstormconfig.cpp \
-            src/stormnode.cpp \
-            src/stormnode-budget.cpp \
-            src/stormnode-payments.cpp \
-            src/sandstorm.cpp \
-            src/sandstorm-relay.cpp \
-            src/rpcstormnode.cpp \
-            src/rpcstormnode-budget.cpp \
-            src/instantx.cpp \
-            src/activestormnode.cpp \
-            src/spork.cpp \
-            src/stormnodeconfig.cpp \
-            src/stormnodeman.cpp \
+            src/anon/stormnode/stormnode.cpp \
+            src/anon/stormnode/stormnode-budget.cpp \
+            src/anon/stormnode/stormnode-payments.cpp \
+            src/anon/sandstorm/sandstorm.cpp \
+            src/anon/sandstorm/sandstorm-relay.cpp \
+            src/rpc/rpcstormnode.cpp \
+            src/rpc/rpcstormnode-budget.cpp \
+            src/anon/instantx/instantx.cpp \
+            src/anon/stormnode/spork.cpp \
+            src/anon/stormnode/stormnodeconfig.cpp \
+            src/anon/stormnode/stormnodeman.cpp \
             src/crypto/hmac_sha256.cpp \
             src/crypto/hmac_sha512.cpp \
             src/crypto/ripemd160.cpp \
@@ -468,26 +468,26 @@ SOURCES +=  src/qt/darksilk.cpp src/qt/darksilkgui.cpp \
             src/qt/sendmessagesentry.cpp \
             src/qt/qvalidatedtextedit.cpp \
             src/qt/plugins/mrichtexteditor/mrichtextedit.cpp \
-            src/rpcsmessage.cpp \
+            src/rpc/rpcsmessage.cpp \
             src/primitives/block.cpp \
             src/primitives/transaction.cpp \
-            src/stormnode-sync.cpp \
+            src/anon/stormnode/stormnode-sync.cpp \
             src/chain.cpp \
             src/uint256.cpp \
             src/coins.cpp \
-            src/compressor.cpp \
+            src/script/compressor.cpp \
             src/leveldbwrapper.cpp \
             src/txdb.cpp \
             src/amount.cpp \
             src/undo.cpp \
-            src/glibc_sanity.cpp \
-            src/glibcxx_sanity.cpp \
+            src/compat/glibc_sanity.cpp \
+            src/compat/glibcxx_sanity.cpp \
             src/crypto/argon2/argon2.c \
             src/crypto/argon2/core.c \
             src/crypto/argon2/encoding.c \
             src/crypto/argon2/thread.c \
             src/crypto/argon2/blake2/blake2b.c \
-            src/crypto/argon2/opt.c \
+            src/crypto/argon2/opt.c
 
 RESOURCES += \
             src/qt/darksilk.qrc
@@ -517,13 +517,13 @@ FORMS += \
             src/qt/plugins/mrichtexteditor/mrichtextedit.ui
 
 contains(DEFINES, USE_NATIVE_I2P) {
-HEADERS +=  src/i2p.h \
-            src/i2psam.h \
+HEADERS +=  src/i2p/i2p.h \
+            src/i2p/i2psam.h \
             src/qt/showi2paddresses.h \
             src/qt/i2poptionswidget.h
 
-SOURCES +=  src/i2p.cpp \
-            src/i2psam.cpp \
+SOURCES +=  src/i2p/i2p.cpp \
+            src/i2p/i2psam.cpp \
             src/qt/showi2paddresses.cpp \
             src/qt/i2poptionswidget.cpp
 
@@ -558,7 +558,7 @@ QMAKE_EXTRA_COMPILERS += TSQM
 
 # "Other files" to show in Qt Creator
 OTHER_FILES += \
-    doc/*.rst doc/*.txt doc/README README.md res/darksilk-qt.rc
+    doc/*.rst doc/*.txt doc/README README.md res/darksilk-core.rc
 
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
@@ -599,7 +599,7 @@ isEmpty(QRENCODE_INCLUDE_PATH) {
 }
 
 windows:DEFINES += WIN32
-windows:RC_FILE = src/qt/res/darksilk-qt.rc
+windows:RC_FILE = src/qt/res/darksilk-core.rc
 
 windows:!contains(MINGW_THREAD_BUGFIX, 0) {
     # At least qmake's win32-g++-cross profile is missing the -lmingwthrd

@@ -425,7 +425,7 @@ HelpMessageBox::HelpMessageBox(QWidget *parent) :
     header = tr("DarkSilk-Qt") + " " + tr("version") + " " +
         QString::fromStdString(FormatFullVersion()) + "\n\n" +
         tr("Usage:") + "\n" +
-        "  darksilk-qt [" + tr("command-line options") + "]                     " + "\n";
+        "  darksilk-core [" + tr("command-line options") + "]                     " + "\n";
 
     coreOptions = QString::fromStdString(HelpMessage());
 

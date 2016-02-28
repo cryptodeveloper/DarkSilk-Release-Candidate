@@ -9,7 +9,7 @@
 #include "walletmodel.h"
 #include "optionsmodel.h"
 #include "addresstablemodel.h"
-#include "stealth.h"
+#include "anon/stealth/stealth.h"
 
 SendCoinsEntry::SendCoinsEntry(QWidget *parent) :
     QFrame(parent),

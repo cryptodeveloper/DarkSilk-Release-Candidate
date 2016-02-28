@@ -4,11 +4,11 @@
 #include "statisticspage.h"
 #include "ui_statisticspage.h"
 #include "main.h"
-#include "wallet.h"
+#include "wallet/wallet.h"
 #include "init.h"
 #include "base58.h"
 #include "clientmodel.h"
-#include "rpcblockchain.cpp"
+#include "rpc/rpcblockchain.cpp"
 
 using namespace json_spirit;
 

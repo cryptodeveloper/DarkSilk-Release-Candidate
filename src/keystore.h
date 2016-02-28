@@ -12,7 +12,7 @@
 #include "key.h"
 #include "pubkey.h"
 #include "sync.h"
-#include "script.h"
+#include "script/script.h"
 
 /** A txout script template with a specific destination. It is either:
  *  * CNoDestination: no destination set

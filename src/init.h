@@ -7,7 +7,7 @@
 #define DARKSILK_INIT_H
 
 #ifdef ENABLE_WALLET
-#include "wallet.h"
+#include "wallet/wallet.h"
 #endif
 
 namespace boost {

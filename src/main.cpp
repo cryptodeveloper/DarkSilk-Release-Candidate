@@ -15,18 +15,18 @@
 #include "alert.h"
 #include "chainparams.h"
 #include "checkpoints.h"
-#include "db.h"
+#include "wallet/db.h"
 #include "init.h"
 #include "kernel.h"
 #include "txdb.h"
 #include "ui_interface.h"
-#include "instantx.h"
-#include "sandstorm.h"
-#include "stormnodeman.h"
-#include "stormnode-budget.h"
-#include "stormnode-payments.h"
-#include "stormnode-sync.h"
-#include "spork.h"
+#include "anon/instantx/instantx.h"
+#include "anon/sandstorm/sandstorm.h"
+#include "anon/stormnode/stormnodeman.h"
+#include "anon/stormnode/stormnode-budget.h"
+#include "anon/stormnode/stormnode-payments.h"
+#include "anon/stormnode/stormnode-sync.h"
+#include "anon/stormnode/spork.h"
 #include "smessage.h"
 #include "coins.h"
 #include "txdb-leveldb.h"
@@ -376,9 +376,11 @@ void FinalizeNode(NodeId nodeid) {
         AddressCurrentlyConnected(state->address);
     }
 
-    BOOST_FOREACH(const QueuedBlock& entry, state->vBlocksInFlight)
+    BOOST_FOREACH(const QueuedBlock& entry, state->vBlocksInFlight) {
+        nQueuedValidatedHeaders -= entry.fValidatedHeaders;
         mapBlocksInFlight.erase(entry.hash);
-
+    }
+    
     BOOST_FOREACH(const uint256& hash, state->vBlocksToDownload)
         mapBlocksToDownload.erase(hash);
 
@@ -2689,9 +2691,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             vRecv >> addrFrom >> nNonce;
         if (!vRecv.empty()) {
             vRecv >> LIMITED_STRING(pfrom->strSubVer, 256);
-            string sSubVersion = SanitizeString(pfrom->strSubVer).replace(0,1,"");
-            sSubVersion.replace(sSubVersion.length()-1, 1, "");
-            pfrom->cleanSubVer = sSubVersion;
+            pfrom->cleanSubVer = SanitizeString(pfrom->strSubVer);
         }
         if (!vRecv.empty())
             vRecv >> pfrom->nStartingHeight;
@@ -2723,7 +2723,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         if (!pfrom->fInbound)
         {
             // Advertise our address
-            if (!fNoListen && !IsInitialBlockDownload())
+            if (fListen && !IsInitialBlockDownload())
             {
                 CAddress addr = GetLocalAddress(&pfrom->addr);
                 if (addr.IsRoutable())
@@ -3429,8 +3429,7 @@ bool ProcessMessages(CNode* pfrom)
 
 bool SendMessages(CNode* pto, bool fSendTrickle)
 {
-    TRY_LOCK(cs_main, lockMain);
-    if (lockMain) {
+    {
         // Don't send anything until we get their version message
         if (pto->nVersion == 0)
             return true;
@@ -3489,7 +3488,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
                         pnode->setAddrKnown.clear();
 
                     // Rebroadcast our address
-                    if (!fNoListen)
+                    if (fListen)
                     {
                         CAddress addr = GetLocalAddress(&pnode->addr);
                         if (addr.IsRoutable())
@@ -3497,7 +3496,8 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
                     }
                 }
             }
-            nLastRebroadcast = GetTime();
+            if (!vNodes.empty())
+                nLastRebroadcast = GetTime();
         }
 
         //

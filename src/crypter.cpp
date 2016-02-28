@@ -21,7 +21,7 @@
 #include <vector>
 
 #include "crypter.h"
-#include "script.h"
+#include "script/script.h"
 #include "scrypt.h"
 
 bool CCrypter::SetKeyFromPassphrase(const SecureString& strKeyData, const std::vector<unsigned char>& chSalt, const unsigned int nRounds, const unsigned int nDerivationMethod)

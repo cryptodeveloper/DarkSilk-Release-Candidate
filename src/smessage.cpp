@@ -41,10 +41,10 @@ Notes:
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
-#include "lz4/lz4.c"
+#include "crypto/lz4/lz4.c"
 
-#include "xxhash/xxhash.h"
-#include "xxhash/xxhash.c"
+#include "crypto/xxhash/xxhash.h"
+#include "crypto/xxhash/xxhash.c"
 
 #include <time.h>
 #include <map>
@@ -56,7 +56,7 @@ Notes:
 
 #include "smessage.h"
 #include "base58.h"
-#include "db.h"
+#include "wallet/db.h"
 #include "init.h" // pwalletMain
 #include "txdb.h"
 #include "sync.h"

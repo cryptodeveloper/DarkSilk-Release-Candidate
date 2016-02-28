@@ -18,9 +18,9 @@ class AddressBookPage;
 class SendCoinsDialog;
 class SignVerifyMessageDialog;
 class Notificator;
-class DEBUGConsole;
+class DEBUGConsole;/*
 class BlockBrowser;
-class StatisticsPage;
+class StatisticsPage;*/
 class MessagePage;
 class StormnodeManager;
 
@@ -87,9 +87,9 @@ private:
     AddressBookPage *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
     SignVerifyMessageDialog *signVerifyMessageDialog;
-    BlockBrowser *blockBrowser;
+    /*BlockBrowser *blockBrowser;
     StatisticsPage *statisticsPage;
-    MessagePage *messagePage;
+    */MessagePage *messagePage;
     StormnodeManager *stormnodeManagerPage;
 
     QLabel* netLabel;
@@ -127,9 +127,9 @@ private:
     QAction *openPeersAction;
     QAction *aboutQtAction;
     QAction *openDEBUGConsoleAction;
-    QAction *blockAction;
+    /*QAction *blockAction;
     QAction *statisticsAction;
-    QAction *messageAction;
+    */QAction *messageAction;
     QAction *stormnodeManagerAction;
 
     QSystemTrayIcon *trayIcon;
@@ -200,9 +200,9 @@ private slots:
     /** Switch to send coins page */
     void gotoSendCoinsPage();
     /** Switch to block explorer*/
-    void gotoBlockBrowser();
+   // void gotoBlockBrowser();
     /** Switch to Statistics Page*/
-    void gotoStatisticsPage();
+   // void gotoStatisticsPage();
     /** Switch to Message Page*/
     void gotoMessagePage();
     /** Switch to Stormnode Manager Page*/

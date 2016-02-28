@@ -8,7 +8,7 @@
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
 
 #ifdef USE_NATIVE_I2P
-#include "i2p.h"
+#include "i2p/i2p.h"
 #endif
 
 #ifndef WIN32

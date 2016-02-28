@@ -4,11 +4,11 @@
 #include "blockbrowser.h"
 #include "ui_blockbrowser.h"
 #include "main.h"
-#include "wallet.h"
+#include "wallet/wallet.h"
 #include "base58.h"
 #include "clientmodel.h"
-#include "rpcserver.h"
-#include "rpcclient.h"
+#include "rpc/rpcserver.h"
+#include "rpc/rpcclient.h"
 #include "transactionrecord.h"
 
 double getBlockHardness(int height)

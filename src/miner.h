@@ -6,7 +6,7 @@
 #ifndef DRKSLK_MINER_H
 #define DRKSLK_MINER_H
 
-#include "wallet.h"
+#include "wallet/wallet.h"
 
 /* Generate a new block, without valid proof-of-work */
 CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake=false, CAmount* pFees = 0);

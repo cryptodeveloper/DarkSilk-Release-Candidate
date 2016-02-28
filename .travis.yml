@@ -7,7 +7,16 @@ dist: trusty
 install:
   - sudo apt-get -qq update
   - sudo apt-get install -y qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools build-essential libboost-dev libboost-system-dev libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev libssl-dev libdb++-dev libminiupnpc-dev
+  - sudo apt-get install -y make libqt5webkit5-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools qtcreator zip unzip dh-autoreconf libboost-thread-dev libssl-dev libdb++-dev libstdc++6 libminiupnpc-dev libevent-dev libcurl4-openssl-dev git libpng-dev qrencode libqrencode-dev build-essential libboost-dev libboost-all-dev libboost-system-dev libboost-filesystem-dev libboost-program-options-dev 
+  - sudo apt-get install -y libevent-dev libgmp-dev liblz-dev libsnappy-dev
 script:
-  - qmake
+  - qmake -qt=qt5 "USE_QRCODE=1" "USE_NATIVE_I2P=1"
   - make
-  - cd src && RELEASE=1 STATIC=TRUE make -f makefile.unix && strip darksilkd
+deploy:
+  provider: releases
+  file: "darksilk-qt"
+  skip_cleanup: true
+  on:
+    tags: true
+  api_key:
+    secure: "ZRckwqyeKAUcSWAfTEFmURtCXmROBSEFDvAhzyfKjTMW9n1O8EF+zRBBDTssfSUX+ucj5jzen1httXdoq8FUVrgTuK7lAwCWe8wizzPYmLaIt5p7GypHUJesSTYtIcZu+I6CL4AWgkplC50JCLd5Zgnz7IYRZPcObxC2/yIcJyhLhWnlskgL53Hr+WjEuAOLnWG4bNZmv/7VOL4OEI7cVsRGD8NTTrGKzmZ5KtJuK/TAsA8KKQQVkiUMcH6YnazDDa9ml36bZE3MVFsijLTBPxUFSm4kTHl84Ia4Y1GPj9IYZJjadbxR7roIKeD0y9AzY4c2TgaGVii/24RQPP2YKTnaHrRM3hohXDdGhb+qXLjckp237gjI3VTH6D9VI5f3aKESiLSUJBoz0eWJlbY/YP4bCkadPchRRqOJv6/HTipkIwOSXasZGKT0MckVnKAatAcnyWqa7nn3bLM/CPI9jGYgs3yRmWHOJbyktIkYTqK+yn48FUeYRg8U+3jlAZtJ+mk/rEzTP25cNt2oCV2jYuBpYzFoaQ3t3ZIU/PAlPfnVrthocEEJj9grvhl0gmb91aejdRuQewMIUTnzTN66OW0OkjnTQxHoix+DDiJmga0ZMR7ScQ3+zOINpNV/n1tTHfIu5ltOJ5mdtqh3qiLMp4hAiSNbCNSiyaMapIpnGNk="
